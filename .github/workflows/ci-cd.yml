@@ -90,7 +90,7 @@ jobs:
     - name: Checkout manifests repo
       uses: actions/checkout@v4
       with:
-        repository: ${{ github.repository }}-manifests
+        repository: ${{ github.repository_owner }}/demo_fiss1_B
         token: ${{ secrets.MANIFESTS_REPO_TOKEN }}
         path: manifests
         
@@ -109,4 +109,5 @@ jobs:
         git add .
         git commit -m "Update demo-fiss-api image to ${{ github.sha }}" || exit 0
         git push
+
 
