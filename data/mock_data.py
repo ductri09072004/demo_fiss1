@@ -9,8 +9,8 @@ def get_system_info():
     """Trả về thông tin hệ thống giả"""
     return {
         "system_info": {
-            "name": "Demo FISS API",
-            "version": "1.0.0",
+            "name": "Demo FISS API v2",
+            "version": "1.0.1",
             "environment": "development"
         },
         "server_status": "running",
