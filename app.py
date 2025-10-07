@@ -12,27 +12,52 @@ response_times = []
 @app.route('/api/base')
 def hello():
     """API endpoint trả về thông tin hệ thống"""
-    return jsonify(get_system_info())
+    global request_count, response_times
+    start_time = time.time()
+    request_count += 1
+    result = jsonify(get_system_info())
+    response_times.append(time.time() - start_time)
+    return result
 
 @app.route('/api/user')
 def api_hello():
     """API endpoint trả về thông tin người dùng"""
-    return jsonify(get_user_profile())
+    global request_count, response_times
+    start_time = time.time()
+    request_count += 1
+    result = jsonify(get_user_profile())
+    response_times.append(time.time() - start_time)
+    return result
 
 @app.route('/api/health')
 def health_check():
     """API endpoint kiểm tra trạng thái server"""
-    return jsonify(get_health_status())
+    global request_count, response_times
+    start_time = time.time()
+    request_count += 1
+    result = jsonify(get_health_status())
+    response_times.append(time.time() - start_time)
+    return result
 
 @app.route('/api/products')
 def get_products():
     """API endpoint trả về danh sách sản phẩm"""
-    return jsonify(get_products_data())
+    global request_count, response_times
+    start_time = time.time()
+    request_count += 1
+    result = jsonify(get_products_data())
+    response_times.append(time.time() - start_time)
+    return result
 
 @app.route('/api/orders')
 def get_orders():
     """API endpoint trả về danh sách đơn hàng"""
-    return jsonify(get_orders_data())
+    global request_count, response_times
+    start_time = time.time()
+    request_count += 1
+    result = jsonify(get_orders_data())
+    response_times.append(time.time() - start_time)
+    return result
 
 @app.route('/metrics')
 def metrics():
