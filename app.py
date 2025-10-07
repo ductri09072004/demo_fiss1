@@ -12,7 +12,7 @@ response_times = []
 @app.route('/api/base')
 def hello():
     """API endpoint trả về thông tin hệ thống"""
-    global request_count, response_times
+    global request_count, response_times  # noqa: F824
     start_time = time.time()
     request_count += 1
     result = jsonify(get_system_info())
@@ -25,7 +25,7 @@ def hello():
 @app.route('/api/user')
 def api_hello():
     """API endpoint trả về thông tin người dùng"""
-    global request_count, response_times
+    global request_count, response_times  # noqa: F824
     start_time = time.time()
     request_count += 1
     result = jsonify(get_user_profile())
@@ -38,7 +38,7 @@ def api_hello():
 @app.route('/api/health')
 def health_check():
     """API endpoint kiểm tra trạng thái server"""
-    global request_count, response_times
+    global request_count, response_times  # noqa: F824
     start_time = time.time()
     request_count += 1
     result = jsonify(get_health_status())
@@ -51,7 +51,7 @@ def health_check():
 @app.route('/api/products')
 def get_products():
     """API endpoint trả về danh sách sản phẩm"""
-    global request_count, response_times
+    global request_count, response_times  # noqa: F824
     start_time = time.time()
     request_count += 1
     result = jsonify(get_products_data())
@@ -64,7 +64,7 @@ def get_products():
 @app.route('/api/orders')
 def get_orders():
     """API endpoint trả về danh sách đơn hàng"""
-    global request_count, response_times
+    global request_count, response_times  # noqa: F824
     start_time = time.time()
     request_count += 1
     result = jsonify(get_orders_data())
@@ -77,7 +77,7 @@ def get_orders():
 @app.route('/metrics')
 def metrics():
     """Prometheus metrics endpoint"""
-    global request_count, response_times
+    global request_count, response_times  # noqa: F824
     
     # Simulate some metrics
     avg_response_time = sum(response_times[-10:]) / len(response_times[-10:]) if response_times else 0
