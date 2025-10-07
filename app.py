@@ -17,6 +17,9 @@ def hello():
     request_count += 1
     result = jsonify(get_system_info())
     response_times.append(time.time() - start_time)
+    # Keep only last 100 response times to prevent memory leak
+    if len(response_times) > 100:
+        response_times.pop(0)
     return result
 
 @app.route('/api/user')
@@ -27,6 +30,9 @@ def api_hello():
     request_count += 1
     result = jsonify(get_user_profile())
     response_times.append(time.time() - start_time)
+    # Keep only last 100 response times to prevent memory leak
+    if len(response_times) > 100:
+        response_times.pop(0)
     return result
 
 @app.route('/api/health')
@@ -37,6 +43,9 @@ def health_check():
     request_count += 1
     result = jsonify(get_health_status())
     response_times.append(time.time() - start_time)
+    # Keep only last 100 response times to prevent memory leak
+    if len(response_times) > 100:
+        response_times.pop(0)
     return result
 
 @app.route('/api/products')
@@ -47,6 +56,9 @@ def get_products():
     request_count += 1
     result = jsonify(get_products_data())
     response_times.append(time.time() - start_time)
+    # Keep only last 100 response times to prevent memory leak
+    if len(response_times) > 100:
+        response_times.pop(0)
     return result
 
 @app.route('/api/orders')
@@ -57,6 +69,9 @@ def get_orders():
     request_count += 1
     result = jsonify(get_orders_data())
     response_times.append(time.time() - start_time)
+    # Keep only last 100 response times to prevent memory leak
+    if len(response_times) > 100:
+        response_times.pop(0)
     return result
 
 @app.route('/metrics')
