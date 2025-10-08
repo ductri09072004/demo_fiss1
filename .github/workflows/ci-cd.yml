@@ -104,7 +104,7 @@ jobs:
         sed -i "s|image: ghcr.io/.*/demo_fiss1:.*|image: ghcr.io/${{ github.repository_owner }}/demo_fiss1:latest|g" k8s/deployment.yaml
         # Thêm timestamp annotation để force restart pods
         TIMESTAMP=$(date +%s)
-        sed -i "s|argocd.argoproj.io/sync-wave: \"0\"|argocd.argoproj.io/sync-wave: \"0\"\n        timestamp: \"$TIMESTAMP\"|g" k8s/deployment.yaml
+        sed -i "s|timestamp: \".*\"|timestamp: \"$TIMESTAMP\"|g" k8s/deployment.yaml
         
     - name: Commit and push changes
       run: |
