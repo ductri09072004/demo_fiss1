@@ -87,9 +87,6 @@ jobs:
     if: github.ref == 'refs/heads/main'
     permissions:
       contents: write
-    # Thêm kubeconfig để kết nối đến cluster
-    container: 
-      image: bitnami/kubectl:latest
     
     steps:
     - name: Checkout manifests repo
@@ -118,21 +115,22 @@ jobs:
         git commit -m "Update demo_fiss1 image to ${{ github.sha }}" || exit 0
         git push
         
-    - name: Setup kubectl
+    - name: Install ArgoCD CLI
       run: |
-        echo "Setting up kubectl for ArgoCD sync..."
-        # Tạo kubeconfig để kết nối đến cluster
-        mkdir -p ~/.kube
+        curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+        sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
+        rm argocd-linux-amd64
         
-    - name: Trigger ArgoCD sync via webhook
+    - name: Trigger ArgoCD sync
       run: |
-        echo "Triggering ArgoCD sync via webhook..."
-        # Dùng webhook để trigger sync
-        curl -X POST "https://argocd.your-domain.com/api/v1/applications/demo-fiss-api/sync" \
-          -H "Authorization: Bearer ${{ secrets.ARGOCD_TOKEN }}" \
-          -H "Content-Type: application/json" \
-          -d '{"prune": true, "dryRun": false}' || echo "Webhook sync failed, but ArgoCD will auto-sync from Git changes"
+        echo "Triggering ArgoCD sync after image is ready..."
+        # Port forward ArgoCD server
+        kubectl port-forward svc/argocd-server -n argocd 8080:443 &
+        sleep 5
         
-        echo "ArgoCD sync triggered via webhook!"
+        # Login và sync
+        argocd login localhost:8080 --username admin --password ${{ secrets.ARGOCD_PASSWORD }} --insecure
+        argocd app sync demo-fiss-api --force
+        echo "ArgoCD sync completed!"
 
 
