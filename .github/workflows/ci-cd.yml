@@ -87,6 +87,9 @@ jobs:
     if: github.ref == 'refs/heads/main'
     permissions:
       contents: write
+    # Thêm kubeconfig để kết nối đến cluster
+    container: 
+      image: bitnami/kubectl:latest
     
     steps:
     - name: Checkout manifests repo
@@ -115,9 +118,21 @@ jobs:
         git commit -m "Update demo_fiss1 image to ${{ github.sha }}" || exit 0
         git push
         
-    - name: ArgoCD Auto-Sync
+    - name: Setup kubectl
       run: |
-        echo "ArgoCD will automatically sync when Repo B is updated..."
-        echo "No manual trigger needed - ArgoCD auto-sync is enabled!"
+        echo "Setting up kubectl for ArgoCD sync..."
+        # Tạo kubeconfig để kết nối đến cluster
+        mkdir -p ~/.kube
+        
+    - name: Trigger ArgoCD sync via webhook
+      run: |
+        echo "Triggering ArgoCD sync via webhook..."
+        # Dùng webhook để trigger sync
+        curl -X POST "https://argocd.your-domain.com/api/v1/applications/demo-fiss-api/sync" \
+          -H "Authorization: Bearer ${{ secrets.ARGOCD_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          -d '{"prune": true, "dryRun": false}' || echo "Webhook sync failed, but ArgoCD will auto-sync from Git changes"
+        
+        echo "ArgoCD sync triggered via webhook!"
 
 
