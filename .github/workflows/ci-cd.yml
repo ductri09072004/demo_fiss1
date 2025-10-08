@@ -114,5 +114,10 @@ jobs:
         git add .
         git commit -m "Update demo_fiss1 image to ${{ github.sha }}" || exit 0
         git push
+        
+    - name: Trigger ArgoCD sync
+      run: |
+        echo "Triggering ArgoCD sync after image is ready..."
+        # Có thể thêm webhook call đến ArgoCD API ở đây nếu cần
 
 
