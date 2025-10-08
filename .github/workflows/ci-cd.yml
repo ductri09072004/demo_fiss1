@@ -115,22 +115,10 @@ jobs:
         git commit -m "Update demo_fiss1 image to ${{ github.sha }}" || exit 0
         git push
         
-    - name: Install ArgoCD CLI
+    - name: ArgoCD Auto-Sync
       run: |
-        curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
-        sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
-        rm argocd-linux-amd64
-        
-    - name: Trigger ArgoCD sync
-      run: |
-        echo "Triggering ArgoCD sync after image is ready..."
-        # Port forward ArgoCD server
-        kubectl port-forward svc/argocd-server -n argocd 8080:443 &
-        sleep 5
-        
-        # Login và sync
-        argocd login localhost:8080 --username admin --password ${{ secrets.ARGOCD_PASSWORD }} --insecure
-        argocd app sync demo-fiss-api --force
-        echo "ArgoCD sync completed!"
+        echo "ArgoCD will automatically sync when Repo B is updated..."
+        echo "No manual trigger needed - ArgoCD auto-sync is enabled!"
+        echo "Timestamp updated: $(date)"
 
 
